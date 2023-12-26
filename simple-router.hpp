@@ -43,14 +43,16 @@ public:
   // handle IPv4 packet
   void handleIPv4(const Buffer& packet, const std::string& inIface);
   // forward IPv4 packet
-  void forwardPacket(const Buffer& packet, const std::string& inIface);
+  void forwardIPv4(const Buffer& packet, const std::string& inIface);
 
   // handle ICMP packet
   void handleICMP(const Buffer& packet, const std::string& inIface);
-  // 处理ICMPt3 (Port Unreachable & Time Exceeded)
-  void handleICMP(const Buffer& packet, const std::string& inIface, int type);
-  // 处理ICMPt3 (Host Unreachable)
-  void handleICMP(const Buffer& packet);
+  // 处理Port Unreachable 的 ICMP 
+  void handleICMPPortUnreachable(const Buffer& packet,const std::string& inIface);
+  // 处理 Time Exceeded 的 ICMP
+  void handleICMPTimeExceeded(const Buffer& packet,const std::string& inIface);
+  // 处理 Host Unreachable 的 ICMP
+  void handleICMPHostUnreachable(const Buffer& packet);
 
   /**
    * IMPLEMENT THIS METHOD
