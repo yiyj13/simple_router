@@ -32,16 +32,6 @@ public:
 
   SimpleRouter();
   const static Buffer BROADCAST_ADDR;
-  /**
-   * IMPLEMENT THIS METHOD
-   *
-   * This method is called each time the router receives a packet on
-   * the interface.  The packet buffer \p packet and the receiving
-   * interface \p inIface are passed in as parameters. The packet is
-   * complete with ethernet headers.
-   */
-  void
-  handlePacket(const Buffer& packet, const std::string& inIface);
 
   // handle ARP packet
   void handleArp(const Buffer& packet, const std::string& inIface);
@@ -58,9 +48,20 @@ public:
   // handle ICMP packet
   void handleICMP(const Buffer& packet, const std::string& inIface);
   // 处理ICMPt3 (Port Unreachable & Time Exceeded)
-  void handleICMPt3(const Buffer& packet, const std::string& inIface, int type);
+  void handleICMP(const Buffer& packet, const std::string& inIface, int type);
   // 处理ICMPt3 (Host Unreachable)
-  void handleICMPt3(const Buffer& packet);
+  void handleICMP(const Buffer& packet);
+
+  /**
+   * IMPLEMENT THIS METHOD
+   *
+   * This method is called each time the router receives a packet on
+   * the interface.  The packet buffer \p packet and the receiving
+   * interface \p inIface are passed in as parameters. The packet is
+   * complete with ethernet headers.
+   */
+  void
+  handlePacket(const Buffer& packet, const std::string& inIface);
 
   /**
    * USE THIS METHOD TO SEND PACKETS

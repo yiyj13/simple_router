@@ -32,6 +32,24 @@ ArpCache::periodicCheckArpRequestsAndCacheEntries()
 {
 
   // FILL THIS IN
+  // Remove invalid ARP requests while iterating
+  for (auto iter = m_arpRequests.begin(); iter != m_arpRequests.end();) {
+    if ((*iter)->nTimesSent == 5) {
+      for (auto& pending_packet : (*iter)->packets) {
+        m_router.handleICMPt3(pending_packet.packet);
+      }
+      iter = m_arpRequests.erase(iter);
+    } 
+    else {
+      m_router.sendArpRequest((*iter)->ip);
+      (*iter)->timeSent = steady_clock::now();
+      (*iter)->nTimesSent++;
+      ++iter;
+    }
+  }
+
+  // Remove invalid cache entries
+  m_cacheEntries.remove_if([](const auto& entry) { return !entry->isValid; });
 
 }
 //////////////////////////////////////////////////////////////////////////
