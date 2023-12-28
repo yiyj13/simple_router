@@ -31,12 +31,11 @@ class SimpleRouter
 public:
 
   SimpleRouter();
-  const static Buffer BROADCAST_ADDR;
 
   // handle ARP packet
   void handleArp(const Buffer& packet, const std::string& inIface);
   void handleArpRequest(const Buffer& packet, const std::string& inIface);
-  void handleArpReply(const Buffer& packet);
+  void handleArpReply(const Buffer& packet, const std::string& inIface);
   // send ARP request
   void sendArpRequest(uint32_t ip);
 
@@ -47,12 +46,17 @@ public:
 
   // handle ICMP packet
   void handleICMP(const Buffer& packet, const std::string& inIface);
-  // 处理Port Unreachable 的 ICMP 
+  // send ICMP packet
+  void handleICMPt3(const Buffer& packet, const std::string& inIface, uint8_t type, uint8_t code);
+  // 处理 Port Unreachable 的 ICMP 
   void handleICMPPortUnreachable(const Buffer& packet,const std::string& inIface);
   // 处理 Time Exceeded 的 ICMP
   void handleICMPTimeExceeded(const Buffer& packet,const std::string& inIface);
   // 处理 Host Unreachable 的 ICMP
-  void handleICMPHostUnreachable(const Buffer& packet);
+  void handleICMPHostUnreachable(const Buffer& packet, const std::string& inIface);
+  // 处理 Echo Reply
+  void handleEchoReply(const Buffer& packet, const std::string& inIface);
+
 
   /**
    * IMPLEMENT THIS METHOD

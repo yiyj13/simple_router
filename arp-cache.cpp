@@ -36,7 +36,7 @@ ArpCache::periodicCheckArpRequestsAndCacheEntries()
   for (auto iter = m_arpRequests.begin(); iter != m_arpRequests.end();) {
     if ((*iter)->nTimesSent == 5) {
       for (auto& pending_packet : (*iter)->packets) {
-        m_router.handleICMPt3(pending_packet.packet);
+        m_router.handleICMPHostUnreachable(pending_packet.packet, pending_packet.iface);
       }
       iter = m_arpRequests.erase(iter);
     } 
@@ -49,9 +49,17 @@ ArpCache::periodicCheckArpRequestsAndCacheEntries()
   }
 
   // Remove invalid cache entries
-  m_cacheEntries.remove_if([](const auto& entry) { return !entry->isValid; });
-
+  std::vector<std::shared_ptr<ArpEntry>> invalid_entries;
+  for (auto iter = m_cacheEntries.begin(); iter != m_cacheEntries.end(); ++iter) {
+    if (!(*iter)->isValid) {
+      invalid_entries.push_back(*iter);
+    }
+  }
+  for(auto entry: invalid_entries){
+    m_cacheEntries.remove(entry);
+  }
 }
+
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 

@@ -207,7 +207,8 @@ private:
 
   volatile bool m_shouldStop;
   std::thread m_tickerThread;
-  mutable std::recursive_mutex m_mutex; // TODO: check if the modification is necessary
+  mutable std::mutex m_mutex;
+
   friend std::ostream&
   operator<<(std::ostream& os, const ArpCache& cache);
 };
